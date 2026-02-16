@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,7 +10,7 @@
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body data-page="home">
     <div class="bg-layer" aria-hidden="true"></div>
     <div class="bg-glow" aria-hidden="true"></div>
     <header class="topbar">
@@ -20,6 +20,7 @@
         <h1>VCC GPT</h1>
       </div>
       <div class="session-wrap">
+        <a id="adminNavLink" class="btn btn-soft hidden" href="./admin.html">Admin Dashboard</a>
         <p id="sessionRole">Role: Guest</p>
         <button id="logoutBtn" class="btn btn-soft hidden" type="button">Logout</button>
       </div>
@@ -93,6 +94,35 @@
           </article>
         </div>
 
+        <div id="copyPanel" class="copy-panel">
+          <div class="copy-row">
+            <span class="copy-label">Card Number</span>
+            <strong id="copyCardNumberValue" class="copy-value">-</strong>
+            <button class="btn btn-soft btn-copy" type="button" data-copy-field="number">Copy</button>
+          </div>
+          <div class="copy-row">
+            <span class="copy-label">Expiry Date</span>
+            <strong id="copyExpiryValue" class="copy-value">-</strong>
+            <button class="btn btn-soft btn-copy" type="button" data-copy-field="expiry">Copy</button>
+          </div>
+          <div class="copy-row">
+            <span class="copy-label">Month</span>
+            <strong id="copyMonthValue" class="copy-value">-</strong>
+            <button class="btn btn-soft btn-copy" type="button" data-copy-field="month">Copy</button>
+          </div>
+          <div class="copy-row">
+            <span class="copy-label">Year</span>
+            <strong id="copyYearValue" class="copy-value">-</strong>
+            <button class="btn btn-soft btn-copy" type="button" data-copy-field="year">Copy</button>
+          </div>
+          <div class="copy-row">
+            <span class="copy-label">CVV</span>
+            <strong id="copyCvvValue" class="copy-value">-</strong>
+            <button class="btn btn-soft btn-copy" type="button" data-copy-field="cvv">Copy</button>
+          </div>
+          <p class="copy-note">Data ini hanya dummy untuk keperluan testing, bukan kartu kredit asli.</p>
+        </div>
+
         <div class="generate-actions">
           <button id="generateBtn" class="btn btn-main" type="button">Generate VCC</button>
           <p class="muted action-note">Klik untuk mendapatkan VCC dummy baru.</p>
@@ -107,7 +137,7 @@
       </section>
 
       <section id="loginPanel" class="panel reveal delay-1">
-        <h2>Login User / Admin</h2>
+        <h3>Login User / Admin</h3>
         <p class="muted">Tidak ada register. User ditambahkan dari dashboard admin.</p>
         <form id="loginForm" class="stack-form">
           <label>
@@ -120,90 +150,6 @@
           </label>
           <button class="btn btn-main" type="submit">Login</button>
         </form>
-      </section>
-
-      <section id="adminPanel" class="panel admin-panel hidden reveal delay-2">
-        <h2>Admin Dashboard</h2>
-        <div class="admin-grid">
-          <article class="subpanel">
-            <h3>Kelola VCC Dummy</h3>
-            <form id="vccForm" class="stack-form">
-              <label>
-                Input List VCC Batch (1 baris 1 data)
-                <textarea
-                  id="vccInput"
-                  rows="7"
-                  placeholder="6258146890309625|10|2026|241"
-                  required
-                ></textarea>
-              </label>
-              <label>
-                Upload file batch (.txt / .csv)
-                <input id="vccFileInput" type="file" accept=".txt,.csv" />
-              </label>
-              <p id="vccBatchInfo" class="muted">Batch lines: 0</p>
-              <button class="btn btn-main" type="submit">Tambah ke Pool</button>
-            </form>
-            <p id="vccResult" class="message"></p>
-
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Number</th>
-                    <th>Exp</th>
-                    <th>CVV</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="vccTableBody"></tbody>
-              </table>
-            </div>
-          </article>
-
-          <article class="subpanel">
-            <h3>Kelola User & Credit</h3>
-            <form id="addUserForm" class="stack-form">
-              <label>
-                Username
-                <input id="newUsername" type="text" required />
-              </label>
-              <label>
-                Password
-                <input id="newPassword" type="text" required />
-              </label>
-              <label>
-                Role
-                <select id="newRole">
-                  <option value="free">Free</option>
-                  <option value="premium">Premium</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </label>
-              <label>
-                Initial Credit
-                <input id="newCredit" type="number" min="0" value="0" />
-              </label>
-              <button class="btn btn-main" type="submit">Tambah User</button>
-            </form>
-            <p id="userResult" class="message"></p>
-            <p id="userListState" class="muted">Loading users...</p>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>User</th>
-                    <th>Role</th>
-                    <th>Credit</th>
-                    <th>Topup</th>
-                  </tr>
-                </thead>
-                <tbody id="userTableBody"></tbody>
-              </table>
-            </div>
-          </article>
-        </div>
       </section>
     </main>
 

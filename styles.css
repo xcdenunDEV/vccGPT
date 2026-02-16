@@ -154,6 +154,10 @@ h3 {
   gap: 1rem;
 }
 
+.admin-layout {
+  grid-template-columns: 1fr;
+}
+
 .panel {
   background: linear-gradient(145deg, var(--panel), rgba(17, 10, 15, 0.82));
   border: 1px solid var(--line);
@@ -543,6 +547,53 @@ code {
   margin-top: 0.35rem;
 }
 
+.copy-panel {
+  width: min(520px, 100%);
+  display: grid;
+  gap: 0.5rem;
+}
+
+.copy-row {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.58rem 0.68rem;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.copy-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.copy-value {
+  font-family: "Chakra Petch", sans-serif;
+  letter-spacing: 0.06em;
+  font-size: 1rem;
+}
+
+.btn-copy {
+  min-width: 72px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.82rem;
+}
+
+.copy-note {
+  margin: 0.2rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.58rem 0.72rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  text-align: center;
+}
+
 .history-list {
   list-style: none;
   margin: 0;
@@ -606,6 +657,14 @@ textarea:focus {
   text-align: left;
 }
 
+#adminNotice {
+  text-align: left;
+}
+
+#adminNotice h2 {
+  font-size: clamp(1.55rem, 3vw, 2.2rem);
+}
+
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(260px, 1fr));
@@ -653,6 +712,40 @@ th {
 .row-actions input {
   width: 76px;
   padding: 0.4rem 0.45rem;
+}
+
+.table-pagination {
+  margin-top: 0.65rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagination-meta {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  padding: 0.3rem 0.58rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+.btn-page {
+  padding: 0.3rem 0.62rem;
+  font-size: 0.8rem;
 }
 
 .hidden {
@@ -758,6 +851,11 @@ th {
 
   .credit-box {
     grid-template-columns: 1fr;
+  }
+
+  .copy-row {
+    grid-template-columns: 1fr;
+    justify-items: start;
   }
 
   .card-stage {
