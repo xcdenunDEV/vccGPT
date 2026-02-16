@@ -6,7 +6,7 @@ import { badRequest, json, methodNotAllowed, parseBody, unauthorized } from "./_
 export async function handler(event) {
   if (event.httpMethod !== "POST") return methodNotAllowed(["POST"]);
 
-  await ensureAdminSeed();
+  await ensureAdminSeed(event);
 
   let body;
   try {
@@ -19,14 +19,14 @@ export async function handler(event) {
   const password = String(body.password || "").trim();
   if (!username || !password) return badRequest("Username and password are required");
 
-  const users = await getUsers();
+  const users = await getUsers(event);
   const user = users.find((item) => item.username.toLowerCase() === username.toLowerCase());
   if (!user || !verifyPassword(password, user.passwordHash)) {
     return unauthorized("Invalid username or password");
   }
 
   const { changed } = applyCumulativeCredits(user, user.role);
-  if (changed) await saveUsers(users);
+  if (changed) await saveUsers(event, users);
 
   const token = signToken({
     sub: user.id,

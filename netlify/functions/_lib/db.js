@@ -1,9 +1,7 @@
 import crypto from "node:crypto";
-import { getStore } from "@netlify/blobs";
+import { connectLambda, getStore } from "@netlify/blobs";
 import { hashPassword } from "./auth.js";
 import { DAILY_CREDIT } from "./credits.js";
-
-const store = getStore({ name: "vcc-gpt" });
 
 const KEYS = {
   users: "users",
@@ -12,45 +10,54 @@ const KEYS = {
   usageLogs: "usage-logs"
 };
 
-export async function getJson(key, fallbackValue) {
+function getBlobStore(event) {
+  if (event) {
+    connectLambda(event);
+  }
+  return getStore("vcc-gpt");
+}
+
+export async function getJson(event, key, fallbackValue) {
+  const store = getBlobStore(event);
   const value = await store.get(key, { type: "json" });
   return value ?? fallbackValue;
 }
 
-export async function setJson(key, value) {
+export async function setJson(event, key, value) {
+  const store = getBlobStore(event);
   await store.setJSON(key, value);
 }
 
-export async function getUsers() {
-  return getJson(KEYS.users, []);
+export async function getUsers(event) {
+  return getJson(event, KEYS.users, []);
 }
 
-export async function saveUsers(users) {
-  await setJson(KEYS.users, users);
+export async function saveUsers(event, users) {
+  await setJson(event, KEYS.users, users);
 }
 
-export async function getVccPool() {
-  return getJson(KEYS.vccPool, []);
+export async function getVccPool(event) {
+  return getJson(event, KEYS.vccPool, []);
 }
 
-export async function saveVccPool(vccPool) {
-  await setJson(KEYS.vccPool, vccPool);
+export async function saveVccPool(event, vccPool) {
+  await setJson(event, KEYS.vccPool, vccPool);
 }
 
-export async function getGuests() {
-  return getJson(KEYS.guests, {});
+export async function getGuests(event) {
+  return getJson(event, KEYS.guests, {});
 }
 
-export async function saveGuests(guests) {
-  await setJson(KEYS.guests, guests);
+export async function saveGuests(event, guests) {
+  await setJson(event, KEYS.guests, guests);
 }
 
-export async function getUsageLogs() {
-  return getJson(KEYS.usageLogs, []);
+export async function getUsageLogs(event) {
+  return getJson(event, KEYS.usageLogs, []);
 }
 
-export async function saveUsageLogs(usageLogs) {
-  await setJson(KEYS.usageLogs, usageLogs);
+export async function saveUsageLogs(event, usageLogs) {
+  await setJson(event, KEYS.usageLogs, usageLogs);
 }
 
 export function sanitizeUser(user) {
@@ -67,8 +74,8 @@ export function sanitizeUser(user) {
   };
 }
 
-export async function ensureAdminSeed() {
-  const users = await getUsers();
+export async function ensureAdminSeed(event) {
+  const users = await getUsers(event);
   if (users.length > 0) return users;
 
   const adminUsername = (process.env.VCC_ADMIN_USERNAME || "admin").trim();
@@ -84,7 +91,6 @@ export async function ensureAdminSeed() {
     createdAt: new Date().toISOString()
   };
 
-  await saveUsers([adminUser]);
+  await saveUsers(event, [adminUser]);
   return [adminUser];
 }
-

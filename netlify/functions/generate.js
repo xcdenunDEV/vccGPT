@@ -25,7 +25,7 @@ function pickAvailableVcc(vccPool) {
 
 export async function handler(event) {
   if (event.httpMethod !== "POST") return methodNotAllowed(["POST"]);
-  await ensureAdminSeed();
+  await ensureAdminSeed(event);
 
   let body;
   try {
@@ -38,10 +38,10 @@ export async function handler(event) {
   const auth = getAuthPayload(event);
 
   const [users, guests, vccPool, usageLogs] = await Promise.all([
-    getUsers(),
-    getGuests(),
-    getVccPool(),
-    getUsageLogs()
+    getUsers(event),
+    getGuests(event),
+    getVccPool(event),
+    getUsageLogs(event)
   ]);
 
   let actorType = "guest";
@@ -77,8 +77,8 @@ export async function handler(event) {
   }
 
   if (actorRole !== "admin" && actorCredits < 1) {
-    if (actingUser && actorChanged) await saveUsers(users);
-    if (actingGuest && actorChanged) await saveGuests(guests);
+    if (actingUser && actorChanged) await saveUsers(event, users);
+    if (actingGuest && actorChanged) await saveGuests(event, guests);
     return json(402, {
       ok: false,
       message: "Credit habis. Topup dulu untuk lanjut generate."
@@ -87,8 +87,8 @@ export async function handler(event) {
 
   const picked = pickAvailableVcc(vccPool);
   if (!picked) {
-    if (actingUser && actorChanged) await saveUsers(users);
-    if (actingGuest && actorChanged) await saveGuests(guests);
+    if (actingUser && actorChanged) await saveUsers(event, users);
+    if (actingGuest && actorChanged) await saveGuests(event, guests);
     return json(409, {
       ok: false,
       message: "Tidak ada VCC tersedia. Hubungi admin untuk isi ulang list."
@@ -127,10 +127,10 @@ export async function handler(event) {
   usageLogs.unshift(historyEntry);
   if (usageLogs.length > 1000) usageLogs.length = 1000;
 
-  await saveVccPool(vccPool);
-  await saveUsageLogs(usageLogs);
-  if (actingUser) await saveUsers(users);
-  if (actingGuest) await saveGuests(guests);
+  await saveVccPool(event, vccPool);
+  await saveUsageLogs(event, usageLogs);
+  if (actingUser) await saveUsers(event, users);
+  if (actingGuest) await saveGuests(event, guests);
 
   const remainingCredits =
     actorRole === "admin"

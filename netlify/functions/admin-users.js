@@ -28,9 +28,9 @@ export async function handler(event) {
     return methodNotAllowed(["GET", "POST", "PATCH"]);
   }
 
-  await ensureAdminSeed();
+  await ensureAdminSeed(event);
   const auth = getAuthPayload(event);
-  const users = await getUsers();
+  const users = await getUsers(event);
   const adminUser = getAdmin(users, auth);
   if (!auth?.sub) return unauthorized();
   if (!adminUser) return forbidden("Admin only");
@@ -41,7 +41,7 @@ export async function handler(event) {
       const result = applyCumulativeCredits(user, user.role);
       if (result.changed) changed = true;
     }
-    if (changed) await saveUsers(users);
+    if (changed) await saveUsers(event, users);
 
     return json(200, {
       ok: true,
@@ -81,7 +81,7 @@ export async function handler(event) {
     };
 
     users.push(newUser);
-    await saveUsers(users);
+    await saveUsers(event, users);
     return json(200, { ok: true, user: sanitizeUser(newUser) });
   }
 
@@ -110,6 +110,6 @@ export async function handler(event) {
     targetUser.credits = Math.max(0, Number(targetUser.credits || 0) + creditDelta);
   }
 
-  await saveUsers(users);
+  await saveUsers(event, users);
   return json(200, { ok: true, user: sanitizeUser(targetUser) });
 }

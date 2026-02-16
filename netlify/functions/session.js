@@ -13,16 +13,16 @@ import { json, methodNotAllowed } from "./_lib/http.js";
 export async function handler(event) {
   if (event.httpMethod !== "GET") return methodNotAllowed(["GET"]);
 
-  await ensureAdminSeed();
+  await ensureAdminSeed(event);
   const auth = getAuthPayload(event);
 
   if (auth?.sub) {
-    const users = await getUsers();
+    const users = await getUsers(event);
     const user = users.find((item) => item.id === auth.sub);
     if (!user) return json(200, { ok: true, authenticated: false, user: null });
 
     const { changed } = applyCumulativeCredits(user, user.role);
-    if (changed) await saveUsers(users);
+    if (changed) await saveUsers(event, users);
     return json(200, {
       ok: true,
       authenticated: true,
@@ -39,12 +39,12 @@ export async function handler(event) {
     });
   }
 
-  const guests = await getGuests();
+  const guests = await getGuests(event);
   const hadGuest = Boolean(guests[guestId]);
   const existingGuest = guests[guestId] || { credits: 0, lastCreditAt: null };
   const { changed } = applyCumulativeCredits(existingGuest, "guest");
   guests[guestId] = existingGuest;
-  if (changed || !hadGuest) await saveGuests(guests);
+  if (changed || !hadGuest) await saveGuests(event, guests);
 
   return json(200, {
     ok: true,

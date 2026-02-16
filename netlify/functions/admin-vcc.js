@@ -33,13 +33,13 @@ export async function handler(event) {
     return methodNotAllowed(["GET", "POST", "DELETE"]);
   }
 
-  await ensureAdminSeed();
+  await ensureAdminSeed(event);
   const auth = getAuthPayload(event);
-  const users = await getUsers();
+  const users = await getUsers(event);
   if (!auth?.sub) return unauthorized();
   if (!isAdmin(users, auth)) return forbidden("Admin only");
 
-  const vccPool = await getVccPool();
+  const vccPool = await getVccPool(event);
 
   if (event.httpMethod === "GET") {
     const items = vccPool
@@ -92,7 +92,7 @@ export async function handler(event) {
 
     if (addedItems.length > 0) {
       vccPool.push(...addedItems);
-      await saveVccPool(vccPool);
+      await saveVccPool(event, vccPool);
     }
 
     return json(200, {
@@ -111,6 +111,6 @@ export async function handler(event) {
   if (index < 0) return badRequest("VCC not found");
 
   vccPool.splice(index, 1);
-  await saveVccPool(vccPool);
+  await saveVccPool(event, vccPool);
   return json(200, { ok: true });
 }

@@ -4,13 +4,13 @@ import { badRequest, json, methodNotAllowed } from "./_lib/http.js";
 
 export async function handler(event) {
   if (event.httpMethod !== "GET") return methodNotAllowed(["GET"]);
-  await ensureAdminSeed();
+  await ensureAdminSeed(event);
 
   const auth = getAuthPayload(event);
   const guestId = event.queryStringParameters?.guestId?.trim();
   const showAll = event.queryStringParameters?.all === "1";
 
-  const [users, logs] = await Promise.all([getUsers(), getUsageLogs()]);
+  const [users, logs] = await Promise.all([getUsers(event), getUsageLogs(event)]);
 
   let filtered = [];
   if (auth?.sub) {
