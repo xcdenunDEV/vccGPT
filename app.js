@@ -56,6 +56,11 @@ const el = {
   newPassword: document.getElementById("newPassword"),
   newRole: document.getElementById("newRole"),
   newCredit: document.getElementById("newCredit"),
+  adminPasswordForm: document.getElementById("adminPasswordForm"),
+  adminCurrentPassword: document.getElementById("adminCurrentPassword"),
+  adminNewPassword: document.getElementById("adminNewPassword"),
+  adminConfirmPassword: document.getElementById("adminConfirmPassword"),
+  adminPasswordResult: document.getElementById("adminPasswordResult"),
   userResult: document.getElementById("userResult"),
   userListState: document.getElementById("userListState"),
   userTableBody: document.getElementById("userTableBody"),
@@ -424,11 +429,14 @@ function renderVccTable() {
   } else {
     el.vccTableBody.innerHTML = pageItems
       .map((item) => {
-        const status = item.used ? "used ✅" : "available";
+        const rowClass = item.used ? "vcc-used-row" : "";
+        const status = item.used
+          ? '<span class="status-badge used">USED ✅</span>'
+          : '<span class="status-badge available">AVAILABLE</span>';
         const action = item.used
           ? "-"
           : `<button class="btn btn-soft" data-action="delete-vcc" data-id="${escapeHtml(item.id)}" type="button">Delete</button>`;
-        return `<tr>
+        return `<tr class="${rowClass}">
           <td>${escapeHtml(item.number)}</td>
           <td>${escapeHtml(item.month)}/${escapeHtml(item.year)}</td>
           <td>${escapeHtml(item.cvv)}</td>
@@ -473,6 +481,29 @@ function renderUserTable() {
   }
 
   renderPagination(el.userPagination, "user", state.userPage, totalPages, state.userItems.length);
+}
+
+async function handleAdminPasswordSubmit(event) {
+  event.preventDefault();
+  if (!el.adminCurrentPassword || !el.adminNewPassword || !el.adminConfirmPassword) return;
+
+  const currentPassword = el.adminCurrentPassword.value.trim();
+  const newPassword = el.adminNewPassword.value.trim();
+  const confirmPassword = el.adminConfirmPassword.value.trim();
+
+  if (!currentPassword || !newPassword || !confirmPassword) return;
+
+  showMessage(el.adminPasswordResult, "Updating password...");
+  try {
+    const data = await api("admin-password", {
+      method: "POST",
+      body: { currentPassword, newPassword, confirmPassword }
+    });
+    showMessage(el.adminPasswordResult, data.message || "Password berhasil diubah.");
+    el.adminPasswordForm?.reset();
+  } catch (error) {
+    showMessage(el.adminPasswordResult, error.message, true);
+  }
 }
 
 function clearToken() {
@@ -801,6 +832,7 @@ function bindEvents() {
   el.vccPagination?.addEventListener("click", handlePaginationClick);
   el.userPagination?.addEventListener("click", handlePaginationClick);
   el.copyPanel?.addEventListener("click", handleCopyPanelClick);
+  el.adminPasswordForm?.addEventListener("submit", handleAdminPasswordSubmit);
 }
 
 async function init() {

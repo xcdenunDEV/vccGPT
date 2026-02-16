@@ -133,6 +133,26 @@
             </div>
             <div id="userPagination" class="table-pagination"></div>
           </article>
+
+          <article class="subpanel subpanel-wide">
+            <h3>Ubah Password Admin</h3>
+            <form id="adminPasswordForm" class="stack-form">
+              <label>
+                Password Lama
+                <input id="adminCurrentPassword" type="password" autocomplete="current-password" required />
+              </label>
+              <label>
+                Password Baru
+                <input id="adminNewPassword" type="password" autocomplete="new-password" required />
+              </label>
+              <label>
+                Konfirmasi Password Baru
+                <input id="adminConfirmPassword" type="password" autocomplete="new-password" required />
+              </label>
+              <button class="btn btn-main" type="submit">Update Password</button>
+            </form>
+            <p id="adminPasswordResult" class="message"></p>
+          </article>
         </div>
       </section>
     </main>

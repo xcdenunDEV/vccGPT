@@ -1,158 +1,154 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VCC GPT</title>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body data-page="home">
-    <div class="bg-layer" aria-hidden="true"></div>
-    <div class="bg-glow" aria-hidden="true"></div>
-    <header class="topbar">
-      <div class="brand-wrap">
-        <span class="brand-logo">V</span>
-        <span class="brand-kicker">Dummy Generator</span>
-        <h1>VCC GPT</h1>
-      </div>
-      <div class="session-wrap">
-        <a id="adminNavLink" class="btn btn-soft hidden" href="./admin.html">Admin Dashboard</a>
-        <p id="sessionRole">Role: Guest</p>
-        <button id="logoutBtn" class="btn btn-soft hidden" type="button">Logout</button>
-      </div>
-    </header>
 
-    <main class="layout">
-      <section class="panel generator-panel reveal">
-        <div class="hero-intro">
-          <p class="hero-badge">Dummy Virtual Credit Card</p>
-          <h2>Generate VCC Instantly</h2>
-          <p class="muted hero-copy">
-            Generate virtual card dummy secara cepat untuk testing. Tampilan dibuat seperti kartu asli, data tetap
-            dummy.
-          </p>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VCC GPT</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
 
-        <p class="muted generator-note">
-          Format VCC admin: <code>6258146890309625|10|2026|241</code>. Data ini dummy untuk testing UI.
+<body data-page="home">
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <span class="brand-logo">V</span>
+      <span class="brand-kicker">Dummy Generator</span>
+      <h1>VCC GPT</h1>
+    </div>
+    <div class="session-wrap">
+      <a id="adminNavLink" class="btn btn-soft hidden" href="./admin.html">Admin Dashboard</a>
+      <p id="sessionRole">Role: Guest</p>
+      <button id="logoutBtn" class="btn btn-soft hidden" type="button">Logout</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel generator-panel reveal">
+      <div class="hero-intro">
+        <p class="hero-badge">Dummy Virtual Credit Card</p>
+        <h2>Generate VCC Instantly</h2>
+        <p class="muted hero-copy">
+          Generate virtual card dummy secara cepat untuk testing. Tampilan dibuat seperti kartu asli, data tetap
+          dummy.
         </p>
+      </div>
 
-        <div class="credit-box">
-          <div>
-            <span class="label">Credit</span>
-            <strong id="creditValue">-</strong>
-          </div>
-          <div>
-            <span class="label">Daily Add</span>
-            <strong id="dailyCreditValue">-</strong>
-          </div>
-          <a
-            id="topupLink"
-            class="btn btn-soft"
-            href="https://wa.me/6285156434202?text=Halo%20Admin%2C%20saya%20mau%20topup%20credit%20VCC%20GPT"
-            target="_blank"
-            rel="noreferrer"
-            >Topup via WhatsApp</a
-          >
+      <p class="muted generator-note">
+        Format VCC admin: <code>6258146890309625|10|2026|241</code>. Data ini dummy untuk testing UI.
+      </p>
+
+      <div class="credit-box">
+        <div>
+          <span class="label">Credit</span>
+          <strong id="creditValue">-</strong>
         </div>
+        <div>
+          <span class="label">Daily Add</span>
+          <strong id="dailyCreditValue">-</strong>
+        </div>
+        <a id="topupLink" class="btn btn-soft"
+          href="https://wa.me/6285156434202?text=Halo%20Admin%2C%20saya%20mau%20topup%20credit%20VCC%20GPT"
+          target="_blank" rel="noreferrer">Topup via WhatsApp</a>
+      </div>
 
-        <div class="card-stage">
-          <article id="vccCard" class="vcc-card">
-            <div class="card-gloss"></div>
-            <div class="card-grid"></div>
+      <div class="card-stage">
+        <article id="vccCard" class="vcc-card">
+          <div class="card-gloss"></div>
+          <div class="card-grid"></div>
 
-            <div class="card-top">
-              <span class="chip-real" aria-hidden="true"></span>
-              <p class="chip">UNIONPAY <span>VIRTUAL CARD</span></p>
+          <div class="card-top">
+            <span class="chip-real" aria-hidden="true"></span>
+            <p class="chip">UNIONPAY <span>VIRTUAL CARD</span></p>
+          </div>
+
+          <p id="cardNumber" class="card-number">**** **** **** ****</p>
+          <p id="cardHolder" class="card-name">GUEST USER</p>
+
+          <div class="card-meta">
+            <div>
+              <span>VALID THRU</span>
+              <strong id="cardExpiry">MM/YYYY</strong>
             </div>
-
-            <p id="cardNumber" class="card-number">**** **** **** ****</p>
-            <p id="cardHolder" class="card-name">GUEST USER</p>
-
-            <div class="card-meta">
-              <div>
-                <span>VALID THRU</span>
-                <strong id="cardExpiry">MM/YYYY</strong>
-              </div>
-              <div>
-                <span>CVV</span>
-                <strong id="cardCvv">***</strong>
-              </div>
+            <div>
+              <span>CVV</span>
+              <strong id="cardCvv">***</strong>
             </div>
+          </div>
 
-            <div class="card-bottom">
-              <p class="card-holder">DUMMY USE ONLY</p>
-              <div class="card-brand" aria-hidden="true">
-                <span></span>
-                <span></span>
-              </div>
+          <div class="card-bottom">
+            <p class="card-holder">DUMMY USE ONLY</p>
+            <div class="card-brand" aria-hidden="true">
+              <span></span>
+              <span></span>
             </div>
-          </article>
+          </div>
+        </article>
+      </div>
+
+      <div id="copyPanel" class="copy-panel">
+        <div class="copy-row">
+          <span class="copy-label">Card Number</span>
+          <strong id="copyCardNumberValue" class="copy-value">-</strong>
+          <button class="btn btn-soft btn-copy" type="button" data-copy-field="number">Copy</button>
         </div>
-
-        <div id="copyPanel" class="copy-panel">
-          <div class="copy-row">
-            <span class="copy-label">Card Number</span>
-            <strong id="copyCardNumberValue" class="copy-value">-</strong>
-            <button class="btn btn-soft btn-copy" type="button" data-copy-field="number">Copy</button>
-          </div>
-          <div class="copy-row">
-            <span class="copy-label">Expiry Date</span>
-            <strong id="copyExpiryValue" class="copy-value">-</strong>
-            <button class="btn btn-soft btn-copy" type="button" data-copy-field="expiry">Copy</button>
-          </div>
-          <div class="copy-row">
-            <span class="copy-label">Month</span>
-            <strong id="copyMonthValue" class="copy-value">-</strong>
-            <button class="btn btn-soft btn-copy" type="button" data-copy-field="month">Copy</button>
-          </div>
-          <div class="copy-row">
-            <span class="copy-label">Year</span>
-            <strong id="copyYearValue" class="copy-value">-</strong>
-            <button class="btn btn-soft btn-copy" type="button" data-copy-field="year">Copy</button>
-          </div>
-          <div class="copy-row">
-            <span class="copy-label">CVV</span>
-            <strong id="copyCvvValue" class="copy-value">-</strong>
-            <button class="btn btn-soft btn-copy" type="button" data-copy-field="cvv">Copy</button>
-          </div>
-          <p class="copy-note">Data ini hanya dummy untuk keperluan testing, bukan kartu kredit asli.</p>
+        <div class="copy-row">
+          <span class="copy-label">Expiry Date</span>
+          <strong id="copyExpiryValue" class="copy-value">-</strong>
+          <button class="btn btn-soft btn-copy" type="button" data-copy-field="expiry">Copy</button>
         </div>
-
-        <div class="generate-actions">
-          <button id="generateBtn" class="btn btn-main" type="button">Generate VCC</button>
-          <p class="muted action-note">Klik untuk mendapatkan VCC dummy baru.</p>
+        <div class="copy-row">
+          <span class="copy-label">Month</span>
+          <strong id="copyMonthValue" class="copy-value">-</strong>
+          <button class="btn btn-soft btn-copy" type="button" data-copy-field="month">Copy</button>
         </div>
-
-        <p id="generateMessage" class="message"></p>
-
-        <div class="history-wrap">
-          <h3>Riwayat Used (Sensor)</h3>
-          <ul id="historyList" class="history-list"></ul>
+        <div class="copy-row">
+          <span class="copy-label">Year</span>
+          <strong id="copyYearValue" class="copy-value">-</strong>
+          <button class="btn btn-soft btn-copy" type="button" data-copy-field="year">Copy</button>
         </div>
-      </section>
+        <div class="copy-row">
+          <span class="copy-label">CVV</span>
+          <strong id="copyCvvValue" class="copy-value">-</strong>
+          <button class="btn btn-soft btn-copy" type="button" data-copy-field="cvv">Copy</button>
+        </div>
+        <p class="copy-note">Data ini hanya dummy untuk keperluan testing, bukan kartu kredit asli.</p>
+      </div>
 
-      <section id="loginPanel" class="panel reveal delay-1">
-        <h3>Login User / Admin</h3>
-        <p class="muted">Tidak ada register. User ditambahkan dari dashboard admin.</p>
-        <form id="loginForm" class="stack-form">
-          <label>
-            Username
-            <input id="usernameInput" type="text" autocomplete="username" required />
-          </label>
-          <label>
-            Password
-            <input id="passwordInput" type="password" autocomplete="current-password" required />
-          </label>
-          <button class="btn btn-main" type="submit">Login</button>
-        </form>
-      </section>
-    </main>
+      <div class="generate-actions">
+        <button id="generateBtn" class="btn btn-main" type="button">Generate VCC</button>
+        <p class="muted action-note">Klik untuk mendapatkan VCC dummy baru.</p>
+      </div>
 
-    <script type="module" src="./app.js"></script>
-  </body>
+      <p id="generateMessage" class="message"></p>
+
+      <div class="history-wrap">
+        <h3>Riwayat Used</h3>
+        <ul id="historyList" class="history-list"></ul>
+      </div>
+    </section>
+
+    <section id="loginPanel" class="panel reveal delay-1">
+      <h3>Login User / Admin</h3>
+      <p class="muted">Tidak ada register. User ditambahkan dari dashboard admin.</p>
+      <form id="loginForm" class="stack-form">
+        <label>
+          Username
+          <input id="usernameInput" type="text" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input id="passwordInput" type="password" autocomplete="current-password" required />
+        </label>
+        <button class="btn btn-main" type="submit">Login</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+
 </html>

@@ -1,21 +1,22 @@
 ﻿:root {
-  --bg-0: #050507;
-  --bg-1: #0f060a;
-  --bg-2: #19080d;
-  --bg-3: #260b12;
-  --panel: rgba(13, 12, 18, 0.7);
-  --panel-strong: rgba(16, 14, 22, 0.88);
-  --line: rgba(255, 173, 187, 0.16);
-  --line-strong: rgba(255, 173, 187, 0.28);
-  --ink: #fdeef2;
-  --ink-soft: #d9a8b1;
-  --accent: #ff4867;
-  --accent-2: #ff788d;
-  --accent-3: #ff2d54;
-  --danger: #ff6a7f;
-  --success: #79f2a7;
-  --shadow: 0 28px 60px rgba(0, 0, 0, 0.5);
-  --ring: 0 0 0 2px rgba(255, 120, 141, 0.26);
+  --bg-0: #030711;
+  --bg-1: #071126;
+  --bg-2: #0a1831;
+  --bg-3: #102548;
+  --panel: rgba(8, 18, 36, 0.72);
+  --panel-elevated: rgba(10, 22, 46, 0.9);
+  --line: rgba(122, 170, 255, 0.22);
+  --line-strong: rgba(146, 191, 255, 0.34);
+  --ink: #edf3ff;
+  --ink-soft: #9ab0d8;
+  --accent: #68c3ff;
+  --accent-2: #8addff;
+  --accent-3: #5f88ff;
+  --danger: #ff7e9a;
+  --success: #66f5c7;
+  --used: #8ce7d3;
+  --shadow: 0 26px 60px rgba(0, 0, 0, 0.46);
+  --ring: 0 0 0 2px rgba(113, 190, 255, 0.34);
 }
 
 *,
@@ -33,10 +34,11 @@ body {
 body {
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   color: var(--ink);
-  background: radial-gradient(circle at 18% -10%, rgba(255, 66, 98, 0.24), transparent 36%),
-    radial-gradient(circle at 82% -8%, rgba(255, 106, 127, 0.22), transparent 34%),
-    radial-gradient(circle at 50% 120%, rgba(255, 46, 86, 0.16), transparent 44%),
-    linear-gradient(165deg, var(--bg-0), var(--bg-1) 42%, var(--bg-2) 74%, var(--bg-3));
+  background:
+    radial-gradient(circle at 12% -12%, rgba(109, 170, 255, 0.34), transparent 36%),
+    radial-gradient(circle at 84% -4%, rgba(76, 147, 255, 0.24), transparent 34%),
+    radial-gradient(circle at 50% 115%, rgba(78, 186, 255, 0.2), transparent 44%),
+    linear-gradient(165deg, var(--bg-0), var(--bg-1) 38%, var(--bg-2) 70%, var(--bg-3));
   position: relative;
   overflow-x: hidden;
 }
@@ -50,28 +52,28 @@ body {
 
 .bg-layer {
   background: repeating-linear-gradient(
-    -22deg,
-    rgba(255, 255, 255, 0.015),
-    rgba(255, 255, 255, 0.015) 10px,
-    transparent 10px,
-    transparent 24px
+    -20deg,
+    rgba(255, 255, 255, 0.014),
+    rgba(255, 255, 255, 0.014) 11px,
+    transparent 11px,
+    transparent 25px
   );
-  opacity: 0.45;
+  opacity: 0.5;
 }
 
 .bg-glow {
-  background: radial-gradient(circle at 50% 30%, rgba(255, 67, 98, 0.12), transparent 58%);
-  filter: blur(22px);
+  background: radial-gradient(circle at 50% 34%, rgba(108, 190, 255, 0.15), transparent 56%);
+  filter: blur(20px);
   animation: glowPulse 10s ease-in-out infinite;
 }
 
 .topbar {
-  width: min(1180px, 100% - 2.4rem);
-  margin: 1.3rem auto 1.1rem;
-  padding: 0.55rem 0.8rem;
+  width: min(1200px, calc(100% - 2.4rem));
+  margin: 1.25rem auto 1.1rem;
+  padding: 0.56rem 0.8rem;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: linear-gradient(130deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: space-between;
@@ -83,7 +85,7 @@ body {
   display: grid;
   grid-template-columns: auto auto;
   align-items: center;
-  column-gap: 0.75rem;
+  column-gap: 0.72rem;
 }
 
 .brand-logo {
@@ -96,9 +98,9 @@ body {
   justify-content: center;
   font-family: "Chakra Petch", sans-serif;
   font-weight: 700;
-  color: #1a090c;
-  background: linear-gradient(145deg, #ffc0cc, #ff6280);
-  box-shadow: 0 8px 18px rgba(255, 80, 108, 0.35);
+  color: #051020;
+  background: linear-gradient(145deg, #b7deff, #68b8ff);
+  box-shadow: 0 10px 20px rgba(105, 188, 255, 0.4);
 }
 
 .brand-kicker {
@@ -112,23 +114,23 @@ body {
 h1,
 h2,
 h3 {
-  font-family: "Chakra Petch", "Segoe UI", sans-serif;
   margin: 0;
+  font-family: "Chakra Petch", "Segoe UI", sans-serif;
 }
 
 h1 {
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   line-height: 1;
 }
 
 h2 {
-  font-size: clamp(2rem, 4.4vw, 3.25rem);
+  font-size: clamp(2.05rem, 4.2vw, 3.2rem);
   line-height: 1.05;
 }
 
 h3 {
-  font-size: 1.22rem;
-  margin-bottom: 0.65rem;
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
 }
 
 .session-wrap {
@@ -144,11 +146,11 @@ h3 {
   padding: 0.52rem 0.82rem;
   font-size: 0.86rem;
   color: var(--ink-soft);
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.24);
 }
 
 .layout {
-  width: min(1180px, 100% - 2.4rem);
+  width: min(1200px, calc(100% - 2.4rem));
   margin: 0 auto 2.4rem;
   display: grid;
   gap: 1rem;
@@ -159,18 +161,18 @@ h3 {
 }
 
 .panel {
-  background: linear-gradient(145deg, var(--panel), rgba(17, 10, 15, 0.82));
+  background: linear-gradient(145deg, var(--panel), rgba(8, 16, 34, 0.88));
   border: 1px solid var(--line);
   border-radius: 22px;
   padding: 1.25rem;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
 }
 
 .generator-panel {
   display: grid;
-  gap: 0.95rem;
   justify-items: center;
+  gap: 0.95rem;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -181,13 +183,14 @@ h3 {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 38%, rgba(255, 76, 107, 0.12), transparent 52%);
+  background: radial-gradient(circle at 50% 32%, rgba(102, 181, 255, 0.16), transparent 54%);
 }
 
 .hero-intro,
 .generator-note,
 .credit-box,
 .card-stage,
+.copy-panel,
 .generate-actions,
 .message,
 .history-wrap {
@@ -196,40 +199,40 @@ h3 {
 }
 
 .hero-intro {
+  max-width: 760px;
   display: grid;
-  gap: 0.75rem;
   justify-items: center;
-  max-width: 700px;
-  margin-top: 0.25rem;
+  gap: 0.75rem;
+  margin-top: 0.2rem;
 }
 
 .hero-badge {
   margin: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.43rem 0.8rem;
+  gap: 0.34rem;
+  padding: 0.42rem 0.78rem;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255, 99, 130, 0.08);
-  color: #ffc8d2;
+  background: rgba(110, 194, 255, 0.1);
+  color: #ccedff;
   font-size: 0.82rem;
 }
 
 .hero-badge::before {
   content: "✦";
-  font-size: 0.72rem;
-  color: #ffd37a;
+  font-size: 0.7rem;
+  color: #9fe4ff;
 }
 
 .hero-copy {
-  max-width: 640px;
   margin: 0;
+  max-width: 650px;
 }
 
 .generator-note {
-  max-width: 860px;
   margin: 0;
+  max-width: 840px;
 }
 
 .muted {
@@ -237,15 +240,15 @@ h3 {
 }
 
 code {
-  color: #ffd4dd;
-  background: rgba(255, 255, 255, 0.06);
+  color: #d8efff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 7px;
   padding: 0.15rem 0.3rem;
-  border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .credit-box {
-  width: min(860px, 100%);
+  width: min(900px, 100%);
   display: grid;
   grid-template-columns: repeat(3, minmax(120px, 1fr));
   gap: 0.72rem;
@@ -256,8 +259,8 @@ code {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 0.78rem 0.82rem;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.01));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .label {
@@ -269,9 +272,9 @@ code {
 }
 
 .card-stage {
-  width: min(520px, 100%);
-  perspective: 1200px;
-  animation: cardFloat 6.6s ease-in-out infinite;
+  width: min(540px, 100%);
+  perspective: 1400px;
+  animation: cardLevitate 7s ease-in-out infinite;
 }
 
 .vcc-card {
@@ -280,42 +283,42 @@ code {
   --px: 50%;
   --py: 50%;
   width: 100%;
-  min-height: 318px;
+  min-height: 328px;
   border-radius: 24px;
-  padding: 1.18rem;
+  padding: 1.2rem;
   position: relative;
   overflow: hidden;
   transform-style: preserve-3d;
-  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-  background: linear-gradient(132deg, #3f111e, #6d1425 38%, #962337 72%, #be2d42);
-  border: 1px solid rgba(255, 214, 221, 0.22);
-  box-shadow: 0 28px 42px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: perspective(1200px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+  transition: transform 220ms cubic-bezier(0.2, 0.65, 0.2, 1), box-shadow 220ms ease;
+  background: linear-gradient(132deg, #142749, #1b3360 38%, #274980 72%, #2f5f9e);
+  border: 1px solid rgba(182, 221, 255, 0.3);
+  box-shadow: 0 28px 44px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .vcc-card::before {
   content: "";
   position: absolute;
-  left: -48%;
+  left: -46%;
   top: -80%;
-  width: 70%;
+  width: 66%;
   height: 260%;
-  background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.22), transparent);
-  transform: rotate(18deg);
-  animation: shineSweep 6.8s linear infinite;
+  background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+  transform: rotate(16deg);
+  animation: shineSweep 7.2s linear infinite;
 }
 
 .vcc-card::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at var(--px) var(--py), rgba(255, 255, 255, 0.24), transparent 46%);
+  background: radial-gradient(circle at var(--px) var(--py), rgba(255, 255, 255, 0.26), transparent 44%);
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
 
 .vcc-card.is-generating {
-  animation: cardCharge 0.85s ease-in-out infinite;
+  animation: cardScan 1s ease-in-out infinite;
 }
 
 .vcc-card.is-hit {
@@ -332,16 +335,16 @@ code {
 .card-grid {
   background: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.045),
-    rgba(255, 255, 255, 0.045) 1px,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.04) 1px,
     transparent 1px,
     transparent 14px
   );
-  opacity: 0.17;
+  opacity: 0.16;
 }
 
 .card-gloss {
-  background: radial-gradient(circle at 80% -10%, rgba(255, 255, 255, 0.35), transparent 40%);
+  background: radial-gradient(circle at 84% -10%, rgba(255, 255, 255, 0.38), transparent 40%);
 }
 
 .card-top,
@@ -364,17 +367,17 @@ code {
   width: 54px;
   height: 38px;
   border-radius: 9px;
-  background: linear-gradient(145deg, #f0d08d, #c6a86f 62%, #e8c27e);
-  box-shadow: inset 0 0 0 1px rgba(50, 34, 9, 0.25);
+  background: linear-gradient(145deg, #efd08c, #d3b26f 58%, #f0cc84);
+  box-shadow: inset 0 0 0 1px rgba(49, 35, 12, 0.24);
   position: relative;
-  animation: chipPulse 4.5s ease-in-out infinite;
+  animation: chipPulse 4.2s ease-in-out infinite;
 }
 
 .chip-real::before,
 .chip-real::after {
   content: "";
   position: absolute;
-  background: rgba(100, 71, 20, 0.34);
+  background: rgba(96, 72, 28, 0.34);
 }
 
 .chip-real::before {
@@ -396,24 +399,22 @@ code {
   text-align: right;
   font-size: 1.72rem;
   letter-spacing: 0.06em;
-  font-family: "Chakra Petch", sans-serif;
   line-height: 1;
 }
 
 .chip span {
   display: block;
   margin-top: 0.2rem;
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   letter-spacing: 0.22em;
-  color: rgba(255, 236, 240, 0.8);
+  color: rgba(235, 245, 255, 0.86);
 }
 
 .card-number {
-  margin: 2.15rem 0 1.7rem;
+  margin: 2.15rem 0 1.72rem;
   text-align: left;
-  font-size: clamp(1.18rem, 3.2vw, 1.75rem);
+  font-size: clamp(1.15rem, 3.2vw, 1.74rem);
   letter-spacing: 0.2em;
-  font-family: "Chakra Petch", sans-serif;
   text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
@@ -422,25 +423,24 @@ code {
   text-align: left;
   font-size: 1rem;
   letter-spacing: 0.16em;
-  color: rgba(255, 241, 244, 0.9);
+  color: rgba(237, 246, 255, 0.92);
 }
 
 .card-meta {
   margin-top: 0.95rem;
   display: flex;
-  gap: 1.65rem;
+  gap: 1.62rem;
 }
 
 .card-meta span {
   display: block;
   text-align: left;
   font-size: 0.68rem;
-  letter-spacing: 0.15em;
-  opacity: 0.85;
+  letter-spacing: 0.14em;
+  opacity: 0.86;
 }
 
 .card-meta strong {
-  font-family: "Chakra Petch", sans-serif;
   font-size: 1.08rem;
   letter-spacing: 0.1em;
 }
@@ -454,9 +454,9 @@ code {
 
 .card-holder {
   margin: 0;
-  font-size: 0.74rem;
+  font-size: 0.73rem;
   letter-spacing: 0.2em;
-  color: rgba(255, 238, 241, 0.85);
+  color: rgba(234, 245, 255, 0.84);
 }
 
 .card-brand {
@@ -471,12 +471,59 @@ code {
 }
 
 .card-brand span:first-child {
-  background: rgba(255, 71, 104, 0.9);
+  background: rgba(229, 75, 104, 0.9);
 }
 
 .card-brand span:last-child {
-  background: rgba(255, 173, 66, 0.9);
+  background: rgba(255, 183, 88, 0.9);
   margin-left: -10px;
+}
+
+.copy-panel {
+  width: min(540px, 100%);
+  display: grid;
+  gap: 0.5rem;
+}
+
+.copy-row {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.58rem 0.68rem;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.012));
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.copy-label {
+  font-size: 0.79rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.copy-value {
+  font-family: "Chakra Petch", sans-serif;
+  letter-spacing: 0.06em;
+  font-size: 1rem;
+}
+
+.btn-copy {
+  min-width: 72px;
+  padding: 0.35rem 0.62rem;
+  font-size: 0.82rem;
+}
+
+.copy-note {
+  margin: 0.2rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.58rem 0.72rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  text-align: center;
 }
 
 .generate-actions {
@@ -511,9 +558,9 @@ code {
 }
 
 .btn-main {
-  color: #23080d;
-  background: linear-gradient(120deg, #ffafbe, var(--accent), var(--accent-3));
-  box-shadow: 0 12px 28px rgba(255, 64, 98, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.33);
+  color: #07152a;
+  background: linear-gradient(120deg, #b7e6ff, var(--accent), var(--accent-3));
+  box-shadow: 0 12px 28px rgba(94, 172, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 #generateBtn {
@@ -542,56 +589,9 @@ code {
 }
 
 .history-wrap {
-  width: min(860px, 100%);
+  width: min(900px, 100%);
   text-align: left;
-  margin-top: 0.35rem;
-}
-
-.copy-panel {
-  width: min(520px, 100%);
-  display: grid;
-  gap: 0.5rem;
-}
-
-.copy-row {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 0.58rem 0.68rem;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 0.6rem;
-  align-items: center;
-}
-
-.copy-label {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-.copy-value {
-  font-family: "Chakra Petch", sans-serif;
-  letter-spacing: 0.06em;
-  font-size: 1rem;
-}
-
-.btn-copy {
-  min-width: 72px;
-  padding: 0.35rem 0.6rem;
-  font-size: 0.82rem;
-}
-
-.copy-note {
-  margin: 0.2rem 0 0;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 0.58rem 0.72rem;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--ink-soft);
-  font-size: 0.86rem;
-  text-align: center;
+  margin-top: 0.4rem;
 }
 
 .history-list {
@@ -599,7 +599,7 @@ code {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.52rem;
+  gap: 0.54rem;
 }
 
 .history-list li {
@@ -649,14 +649,11 @@ select:focus,
 textarea:focus {
   outline: none;
   box-shadow: var(--ring);
-  border-color: rgba(255, 142, 161, 0.62);
+  border-color: rgba(130, 210, 255, 0.78);
 }
 
 #loginPanel,
-#adminPanel {
-  text-align: left;
-}
-
+#adminPanel,
 #adminNotice {
   text-align: left;
 }
@@ -676,6 +673,10 @@ textarea:focus {
   border-radius: 14px;
   padding: 0.85rem;
   background: rgba(255, 255, 255, 0.03);
+}
+
+.subpanel-wide {
+  grid-column: 1 / -1;
 }
 
 .table-wrap {
@@ -701,6 +702,32 @@ td {
 th {
   color: var(--ink-soft);
   font-weight: 600;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.18rem 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--line);
+}
+
+.status-badge.available {
+  color: #d5e9ff;
+  background: rgba(108, 179, 255, 0.15);
+  border-color: rgba(140, 205, 255, 0.45);
+}
+
+.status-badge.used {
+  color: #defbf3;
+  background: rgba(82, 220, 176, 0.18);
+  border-color: rgba(139, 245, 214, 0.48);
+}
+
+.vcc-used-row td {
+  background: linear-gradient(140deg, rgba(86, 214, 176, 0.06), rgba(86, 214, 176, 0.02));
 }
 
 .row-actions {
@@ -769,6 +796,7 @@ th {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -778,29 +806,32 @@ th {
 @keyframes glowPulse {
   0%,
   100% {
-    opacity: 0.72;
+    opacity: 0.74;
   }
+
   50% {
     opacity: 1;
   }
 }
 
-@keyframes cardFloat {
+@keyframes cardLevitate {
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-7px);
   }
 }
 
 @keyframes shineSweep {
   0% {
-    transform: translateX(-14%) rotate(18deg);
+    transform: translateX(-18%) rotate(16deg);
   }
+
   100% {
-    transform: translateX(235%) rotate(18deg);
+    transform: translateX(238%) rotate(16deg);
   }
 }
 
@@ -809,29 +840,36 @@ th {
   100% {
     filter: brightness(1);
   }
+
   50% {
-    filter: brightness(1.15);
+    filter: brightness(1.14);
   }
 }
 
-@keyframes cardCharge {
+@keyframes cardScan {
   0%,
   100% {
-    box-shadow: 0 28px 42px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 28px 44px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   }
+
   50% {
-    box-shadow: 0 30px 52px rgba(255, 46, 86, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    box-shadow: 0 34px 56px rgba(92, 176, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.34);
   }
 }
 
 @keyframes cardHit {
   0% {
+    transform: perspective(1200px) rotateX(var(--rx)) rotateY(var(--ry)) scale(1);
     filter: saturate(1);
   }
-  35% {
-    filter: saturate(1.4);
+
+  40% {
+    transform: perspective(1200px) rotateX(var(--rx)) rotateY(var(--ry)) scale(1.022);
+    filter: saturate(1.2);
   }
+
   100% {
+    transform: perspective(1200px) rotateX(var(--rx)) rotateY(var(--ry)) scale(1);
     filter: saturate(1);
   }
 }
@@ -859,11 +897,11 @@ th {
   }
 
   .card-stage {
-    width: min(460px, 100%);
+    width: min(470px, 100%);
   }
 
   .vcc-card {
-    min-height: 288px;
+    min-height: 292px;
   }
 
   .chip {
@@ -880,6 +918,7 @@ th {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .bg-glow,
   .card-stage,
   .chip-real,

@@ -19,6 +19,7 @@ Website dummy generator VCC berbasis Netlify Functions + Netlify Blobs.
   - tambah list VCC batch (paste multi-line/koma/semicolon atau upload .txt/.csv)
   - tambah user
   - topup credit user
+  - ubah password admin (dengan verifikasi password lama)
 - Riwayat VCC used (masked) dengan status `Live Hit Success ✅`.
 - Tombol topup via WhatsApp admin `085156434202`.
 - Panel copy cepat untuk `card number`, `expiry`, `month`, `year`, dan `cvv`.
