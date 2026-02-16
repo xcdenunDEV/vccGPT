@@ -12,8 +12,10 @@
   </head>
   <body>
     <div class="bg-layer" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
     <header class="topbar">
       <div class="brand-wrap">
+        <span class="brand-logo">V</span>
         <span class="brand-kicker">Dummy Generator</span>
         <h1>VCC GPT</h1>
       </div>
@@ -25,8 +27,16 @@
 
     <main class="layout">
       <section class="panel generator-panel reveal">
-        <h2>Generate VCC Dummy</h2>
-        <p class="muted">
+        <div class="hero-intro">
+          <p class="hero-badge">Dummy Virtual Credit Card</p>
+          <h2>Generate VCC Instantly</h2>
+          <p class="muted hero-copy">
+            Generate virtual card dummy secara cepat untuk testing. Tampilan dibuat seperti kartu asli, data tetap
+            dummy.
+          </p>
+        </div>
+
+        <p class="muted generator-note">
           Format VCC admin: <code>6258146890309625|10|2026|241</code>. Data ini dummy untuk testing UI.
         </p>
 
@@ -49,24 +59,46 @@
           >
         </div>
 
-        <button id="generateBtn" class="btn btn-main" type="button">Generate VCC</button>
-        <p id="generateMessage" class="message"></p>
+        <div class="card-stage">
+          <article id="vccCard" class="vcc-card">
+            <div class="card-gloss"></div>
+            <div class="card-grid"></div>
 
-        <article id="vccCard" class="vcc-card">
-          <p class="chip">UNION PAY</p>
-          <p id="cardNumber" class="card-number">**** **** **** ****</p>
-          <div class="card-meta">
-            <div>
-              <span>VALID THRU</span>
-              <strong id="cardExpiry">MM/YYYY</strong>
+            <div class="card-top">
+              <span class="chip-real" aria-hidden="true"></span>
+              <p class="chip">UNIONPAY <span>VIRTUAL CARD</span></p>
             </div>
-            <div>
-              <span>CVV</span>
-              <strong id="cardCvv">***</strong>
+
+            <p id="cardNumber" class="card-number">**** **** **** ****</p>
+            <p id="cardHolder" class="card-name">GUEST USER</p>
+
+            <div class="card-meta">
+              <div>
+                <span>VALID THRU</span>
+                <strong id="cardExpiry">MM/YYYY</strong>
+              </div>
+              <div>
+                <span>CVV</span>
+                <strong id="cardCvv">***</strong>
+              </div>
             </div>
-          </div>
-          <p class="card-holder">DUMMY USE ONLY</p>
-        </article>
+
+            <div class="card-bottom">
+              <p class="card-holder">DUMMY USE ONLY</p>
+              <div class="card-brand" aria-hidden="true">
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="generate-actions">
+          <button id="generateBtn" class="btn btn-main" type="button">Generate VCC</button>
+          <p class="muted action-note">Klik untuk mendapatkan VCC dummy baru.</p>
+        </div>
+
+        <p id="generateMessage" class="message"></p>
 
         <div class="history-wrap">
           <h3>Riwayat Used (Sensor)</h3>

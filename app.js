@@ -19,7 +19,9 @@ const el = {
   dailyCreditValue: document.getElementById("dailyCreditValue"),
   generateBtn: document.getElementById("generateBtn"),
   generateMessage: document.getElementById("generateMessage"),
+  vccCard: document.getElementById("vccCard"),
   cardNumber: document.getElementById("cardNumber"),
+  cardHolder: document.getElementById("cardHolder"),
   cardExpiry: document.getElementById("cardExpiry"),
   cardCvv: document.getElementById("cardCvv"),
   historyList: document.getElementById("historyList"),
@@ -94,6 +96,61 @@ function showMessage(target, message, isError = false) {
   target.style.color = isError ? "var(--danger)" : "var(--ink-soft)";
 }
 
+function resetCardTransform() {
+  el.vccCard?.style.setProperty("--rx", "0deg");
+  el.vccCard?.style.setProperty("--ry", "0deg");
+  el.vccCard?.style.setProperty("--px", "50%");
+  el.vccCard?.style.setProperty("--py", "50%");
+}
+
+function initializeCardMotion() {
+  if (!el.vccCard) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const maxTilt = 8;
+  let frameRequested = false;
+  let pending = null;
+
+  const applyTilt = () => {
+    frameRequested = false;
+    if (!pending) return;
+
+    const { clientX, clientY, rect } = pending;
+    const px = (clientX - rect.left) / rect.width;
+    const py = (clientY - rect.top) / rect.height;
+    const rx = (0.5 - py) * maxTilt;
+    const ry = (px - 0.5) * maxTilt;
+
+    el.vccCard.style.setProperty("--rx", `${rx.toFixed(2)}deg`);
+    el.vccCard.style.setProperty("--ry", `${ry.toFixed(2)}deg`);
+    el.vccCard.style.setProperty("--px", `${(px * 100).toFixed(2)}%`);
+    el.vccCard.style.setProperty("--py", `${(py * 100).toFixed(2)}%`);
+  };
+
+  el.vccCard.addEventListener("pointermove", (event) => {
+    const rect = el.vccCard.getBoundingClientRect();
+    pending = { clientX: event.clientX, clientY: event.clientY, rect };
+    if (!frameRequested) {
+      frameRequested = true;
+      window.requestAnimationFrame(applyTilt);
+    }
+  });
+
+  el.vccCard.addEventListener("pointerleave", () => {
+    pending = null;
+    resetCardTransform();
+  });
+}
+
+function pulseCardHit() {
+  if (!el.vccCard) return;
+  el.vccCard.classList.remove("is-hit");
+  window.requestAnimationFrame(() => {
+    el.vccCard.classList.add("is-hit");
+    window.setTimeout(() => el.vccCard?.classList.remove("is-hit"), 700);
+  });
+}
+
 async function api(path, { method = "GET", body = null, auth = true } = {}) {
   const headers = {};
   if (body) headers["Content-Type"] = "application/json";
@@ -144,6 +201,11 @@ function renderSession() {
     el.logoutBtn.classList.add("hidden");
     el.adminPanel.classList.add("hidden");
     el.topupLink.classList.remove("hidden");
+  }
+
+  if (el.cardHolder) {
+    const holderRaw = state.user?.username || "GUEST USER";
+    el.cardHolder.textContent = holderRaw.toUpperCase().slice(0, 18);
   }
 
   const currentCredit = state.user
@@ -298,6 +360,7 @@ async function loadUsers() {
 
 async function handleGenerate() {
   el.generateBtn.disabled = true;
+  el.vccCard?.classList.add("is-generating");
   showMessage(el.generateMessage, "Generating...");
   try {
     const data = await api("generate", {
@@ -306,6 +369,7 @@ async function handleGenerate() {
       auth: true
     });
     renderCard(data.generated);
+    pulseCardHit();
     showMessage(el.generateMessage, `Success. Sisa credit: ${data.remainingCredits}`);
     await refreshSession();
     await loadHistory();
@@ -313,6 +377,7 @@ async function handleGenerate() {
   } catch (error) {
     showMessage(el.generateMessage, error.message, true);
   } finally {
+    el.vccCard?.classList.remove("is-generating");
     renderSession();
   }
 }
@@ -461,6 +526,8 @@ async function handleVccTableClick(event) {
 
 async function init() {
   renderCard(null);
+  resetCardTransform();
+  initializeCardMotion();
   try {
     await refreshSession();
     await loadHistory();
