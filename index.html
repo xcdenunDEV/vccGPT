@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VCC GPT</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-layer" aria-hidden="true"></div>
+    <header class="topbar">
+      <div class="brand-wrap">
+        <span class="brand-kicker">Dummy Generator</span>
+        <h1>VCC GPT</h1>
+      </div>
+      <div class="session-wrap">
+        <p id="sessionRole">Role: Guest</p>
+        <button id="logoutBtn" class="btn btn-soft hidden" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel generator-panel reveal">
+        <h2>Generate VCC Dummy</h2>
+        <p class="muted">
+          Format VCC admin: <code>6258146890309625|10|2026|241</code>. Data ini dummy untuk testing UI.
+        </p>
+
+        <div class="credit-box">
+          <div>
+            <span class="label">Credit</span>
+            <strong id="creditValue">-</strong>
+          </div>
+          <div>
+            <span class="label">Daily Add</span>
+            <strong id="dailyCreditValue">-</strong>
+          </div>
+          <a
+            id="topupLink"
+            class="btn btn-soft"
+            href="https://wa.me/6285156434202?text=Halo%20Admin%2C%20saya%20mau%20topup%20credit%20VCC%20GPT"
+            target="_blank"
+            rel="noreferrer"
+            >Topup via WhatsApp</a
+          >
+        </div>
+
+        <button id="generateBtn" class="btn btn-main" type="button">Generate VCC</button>
+        <p id="generateMessage" class="message"></p>
+
+        <article id="vccCard" class="vcc-card">
+          <p class="chip">UNION PAY</p>
+          <p id="cardNumber" class="card-number">**** **** **** ****</p>
+          <div class="card-meta">
+            <div>
+              <span>VALID THRU</span>
+              <strong id="cardExpiry">MM/YYYY</strong>
+            </div>
+            <div>
+              <span>CVV</span>
+              <strong id="cardCvv">***</strong>
+            </div>
+          </div>
+          <p class="card-holder">DUMMY USE ONLY</p>
+        </article>
+
+        <div class="history-wrap">
+          <h3>Riwayat Used (Sensor)</h3>
+          <ul id="historyList" class="history-list"></ul>
+        </div>
+      </section>
+
+      <section id="loginPanel" class="panel reveal delay-1">
+        <h2>Login User / Admin</h2>
+        <p class="muted">Tidak ada register. User ditambahkan dari dashboard admin.</p>
+        <form id="loginForm" class="stack-form">
+          <label>
+            Username
+            <input id="usernameInput" type="text" autocomplete="username" required />
+          </label>
+          <label>
+            Password
+            <input id="passwordInput" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="btn btn-main" type="submit">Login</button>
+        </form>
+      </section>
+
+      <section id="adminPanel" class="panel admin-panel hidden reveal delay-2">
+        <h2>Admin Dashboard</h2>
+        <div class="admin-grid">
+          <article class="subpanel">
+            <h3>Kelola VCC Dummy</h3>
+            <form id="vccForm" class="stack-form">
+              <label>
+                Input List VCC Batch (1 baris 1 data)
+                <textarea
+                  id="vccInput"
+                  rows="7"
+                  placeholder="6258146890309625|10|2026|241"
+                  required
+                ></textarea>
+              </label>
+              <label>
+                Upload file batch (.txt / .csv)
+                <input id="vccFileInput" type="file" accept=".txt,.csv" />
+              </label>
+              <p id="vccBatchInfo" class="muted">Batch lines: 0</p>
+              <button class="btn btn-main" type="submit">Tambah ke Pool</button>
+            </form>
+            <p id="vccResult" class="message"></p>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Exp</th>
+                    <th>CVV</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="vccTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="subpanel">
+            <h3>Kelola User & Credit</h3>
+            <form id="addUserForm" class="stack-form">
+              <label>
+                Username
+                <input id="newUsername" type="text" required />
+              </label>
+              <label>
+                Password
+                <input id="newPassword" type="text" required />
+              </label>
+              <label>
+                Role
+                <select id="newRole">
+                  <option value="free">Free</option>
+                  <option value="premium">Premium</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </label>
+              <label>
+                Initial Credit
+                <input id="newCredit" type="number" min="0" value="0" />
+              </label>
+              <button class="btn btn-main" type="submit">Tambah User</button>
+            </form>
+            <p id="userResult" class="message"></p>
+            <p id="userListState" class="muted">Loading users...</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Credit</th>
+                    <th>Topup</th>
+                  </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
