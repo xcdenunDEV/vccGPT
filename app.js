@@ -423,7 +423,8 @@ function renderHistory(items) {
     return;
   }
 
-  el.historyList.innerHTML = items
+  const latestItems = items.slice(0, 10);
+  el.historyList.innerHTML = latestItems
     .map((item) => {
       const actor = isAdmin() ? `<span>${escapeHtml(item.actorLabel || "-")}</span>` : "";
       return `<li>
