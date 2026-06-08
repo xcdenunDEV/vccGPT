@@ -9,11 +9,14 @@ const state = {
   guest: null,
   vccItems: [],
   userItems: [],
+  historyItems: [],
   generatedCard: null,
   vccPage: 1,
   userPage: 1,
+  historyPage: 1,
   vccPageSize: 10,
   userPageSize: 10,
+  historyPageSize: 10,
   userStats: { totalUniqueGuests: 0, totalUniqueIps: 0 }
 };
 
@@ -66,7 +69,9 @@ const el = {
   userResult: document.getElementById("userResult"),
   userListState: document.getElementById("userListState"),
   userTableBody: document.getElementById("userTableBody"),
-  userPagination: document.getElementById("userPagination")
+  userPagination: document.getElementById("userPagination"),
+  historyTableBody: document.getElementById("historyTableBody"),
+  historyPagination: document.getElementById("historyPagination")
 };
 
 function getPrimaryMessageTarget() {
@@ -516,6 +521,32 @@ function renderUserTable() {
   renderPagination(el.userPagination, "user", state.userPage, totalPages, state.userItems.length);
 }
 
+function renderHistoryTable() {
+  if (!el.historyTableBody) return;
+
+  const totalPages = getTotalPages(state.historyItems.length, state.historyPageSize);
+  if (state.historyPage > totalPages) state.historyPage = totalPages;
+  const pageItems = getPageSlice(state.historyItems, state.historyPage, state.historyPageSize);
+
+  if (pageItems.length === 0) {
+    el.historyTableBody.innerHTML = "<tr><td colspan='5'>Belum ada riwayat penggunaan.</td></tr>";
+  } else {
+    el.historyTableBody.innerHTML = pageItems
+      .map((item) => {
+        return `<tr>
+          <td><code>${escapeHtml(item.maskedNumber)}</code></td>
+          <td>${escapeHtml(item.month)}/${escapeHtml(item.year)}</td>
+          <td>${formatDateTime(item.usedAt)}</td>
+          <td>${escapeHtml(item.actorLabel || "-")}</td>
+          <td><span class="status-badge used">${escapeHtml(item.status || "Live Hit Success ✅")}</span></td>
+        </tr>`;
+      })
+      .join("");
+  }
+
+  renderPagination(el.historyPagination, "history", state.historyPage, totalPages, state.historyItems.length);
+}
+
 async function handleAdminPasswordSubmit(event) {
   event.preventDefault();
   if (!el.adminCurrentPassword || !el.adminNewPassword || !el.adminConfirmPassword) return;
@@ -615,6 +646,18 @@ async function loadUsers(resetPage = false) {
   }
 }
 
+async function loadAdminHistory(resetPage = false) {
+  if (!isAdmin() || !el.historyTableBody) return;
+  try {
+    const data = await api("history?all=1", { auth: true });
+    state.historyItems = data.items || [];
+    if (resetPage) state.historyPage = 1;
+    renderHistoryTable();
+  } catch (error) {
+    showMessage(el.adminMessage, error.message, true);
+  }
+}
+
 async function handleGenerate() {
   if (!el.generateBtn) return;
   el.generateBtn.disabled = true;
@@ -672,6 +715,7 @@ async function handleLogin(event) {
       if (isAdmin()) {
         await loadUsers(true);
         await loadVccPool(true);
+        await loadAdminHistory(true);
         showMessage(messageTarget, `Login admin sukses: ${data.user.username}`);
       } else {
         showMessage(messageTarget, "Akun ini bukan admin. Gunakan akun role admin.", true);
@@ -701,6 +745,7 @@ async function handleLogout() {
   if (PAGE_MODE === "admin") {
     renderUserTable();
     renderVccTable();
+    renderHistoryTable();
     showMessage(el.adminMessage, "Anda sudah logout.");
   }
 }
@@ -842,6 +887,16 @@ function applyPaginationAction(kind, action) {
     if (action === "next") state.userPage = Math.min(totalPages, state.userPage + 1);
     if (action === "last") state.userPage = totalPages;
     renderUserTable();
+    return;
+  }
+
+  if (kind === "history") {
+    const totalPages = getTotalPages(state.historyItems.length, state.historyPageSize);
+    if (action === "first") state.historyPage = 1;
+    if (action === "prev") state.historyPage = Math.max(1, state.historyPage - 1);
+    if (action === "next") state.historyPage = Math.min(totalPages, state.historyPage + 1);
+    if (action === "last") state.historyPage = totalPages;
+    renderHistoryTable();
   }
 }
 
@@ -867,6 +922,7 @@ function bindEvents() {
   el.vccTableBody?.addEventListener("click", handleVccTableClick);
   el.vccPagination?.addEventListener("click", handlePaginationClick);
   el.userPagination?.addEventListener("click", handlePaginationClick);
+  el.historyPagination?.addEventListener("click", handlePaginationClick);
   el.copyPanel?.addEventListener("click", handleCopyPanelClick);
   el.adminPasswordForm?.addEventListener("submit", handleAdminPasswordSubmit);
 }
@@ -887,6 +943,7 @@ async function init() {
     if (PAGE_MODE === "admin" && isAdmin()) {
       await loadUsers(true);
       await loadVccPool(true);
+      await loadAdminHistory(true);
     }
   } catch (error) {
     showMessage(getPrimaryMessageTarget(), error.message, true);

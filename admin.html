@@ -16,7 +16,7 @@
   </style>
 </head>
 
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased relative">
+<body data-page="admin" class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased relative">
   <!-- Glowing overlays -->
   <div class="bg-layer" aria-hidden="true"></div>
   <div class="bg-glow" aria-hidden="true"></div>
@@ -191,6 +191,29 @@
             </table>
           </div>
           <div id="userPagination" class="table-pagination"></div>
+        </article>
+
+        <!-- Used VCC History Panel -->
+        <article class="bg-slate-900/20 border border-slate-900/80 backdrop-blur-sm rounded-2xl p-6 space-y-5 shadow-xl lg:col-span-2">
+          <h3 class="text-base font-bold text-white font-mono border-b border-slate-900/60 pb-3">Riwayat Penggunaan VCC</h3>
+          
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>VCC Number</th>
+                  <th>Expiry</th>
+                  <th>Used At</th>
+                  <th>Used By</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="historyTableBody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+          <div id="historyPagination" class="table-pagination"></div>
         </article>
 
         <!-- Admin Change Password Panel (Wide/Centered at the bottom of panel) -->
