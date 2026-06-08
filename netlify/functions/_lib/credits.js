@@ -1,7 +1,7 @@
 export const DAILY_CREDIT = {
   guest: 1,
   free: 5,
-  premium: 20
+  premium: 3
 };
 
 export function getTodayKey(date = new Date()) {
