@@ -39,3 +39,18 @@ export function parseBody(event) {
   }
 }
 
+export function getClientIp(event) {
+  if (!event || !event.headers) return "unknown";
+  const headers = event.headers;
+  const ip = headers["x-nf-client-connection-ip"] ||
+             headers["X-Nf-Client-Connection-Ip"] ||
+             headers["client-ip"] ||
+             headers["Client-Ip"] ||
+             headers["x-forwarded-for"] ||
+             headers["X-Forwarded-For"] ||
+             event.requestContext?.identity?.sourceIp;
+  if (!ip) return "unknown";
+  return ip.split(",")[0].trim();
+}
+
+

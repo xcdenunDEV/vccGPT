@@ -70,9 +70,11 @@ export function sanitizeUser(user) {
     creditsLabel: isAdmin ? "Unlimited" : String(Number(user.credits || 0)),
     dailyCredit: isAdmin ? null : DAILY_CREDIT[user.role] || 0,
     lastCreditAt: user.lastCreditAt || null,
-    createdAt: user.createdAt || null
+    createdAt: user.createdAt || null,
+    lastIp: user.lastIp || null
   };
 }
+
 
 export async function ensureAdminSeed(event) {
   const users = await getUsers(event);

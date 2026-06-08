@@ -8,7 +8,7 @@ import {
   saveGuests,
   saveUsers
 } from "./_lib/db.js";
-import { json, methodNotAllowed } from "./_lib/http.js";
+import { getClientIp, json, methodNotAllowed } from "./_lib/http.js";
 
 export async function handler(event) {
   if (event.httpMethod !== "GET") return methodNotAllowed(["GET"]);
@@ -21,7 +21,13 @@ export async function handler(event) {
     const user = users.find((item) => item.id === auth.sub);
     if (!user) return json(200, { ok: true, authenticated: false, user: null });
 
-    const { changed } = applyCumulativeCredits(user, user.role);
+    const { changed: creditsChanged } = applyCumulativeCredits(user, user.role);
+    let changed = creditsChanged;
+    const clientIp = getClientIp(event);
+    if (user.lastIp !== clientIp) {
+      user.lastIp = clientIp;
+      changed = true;
+    }
     if (changed) await saveUsers(event, users);
     return json(200, {
       ok: true,
@@ -42,7 +48,13 @@ export async function handler(event) {
   const guests = await getGuests(event);
   const hadGuest = Boolean(guests[guestId]);
   const existingGuest = guests[guestId] || { credits: 0, lastCreditAt: null };
-  const { changed } = applyCumulativeCredits(existingGuest, "guest");
+  const { changed: creditsChanged } = applyCumulativeCredits(existingGuest, "guest");
+  let changed = creditsChanged;
+  const clientIp = getClientIp(event);
+  if (existingGuest.lastIp !== clientIp) {
+    existingGuest.lastIp = clientIp;
+    changed = true;
+  }
   guests[guestId] = existingGuest;
   if (changed || !hadGuest) await saveGuests(event, guests);
 
@@ -58,3 +70,4 @@ export async function handler(event) {
     }
   });
 }
+

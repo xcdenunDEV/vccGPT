@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { getAuthPayload, hashPassword } from "./_lib/auth.js";
 import { applyCumulativeCredits } from "./_lib/credits.js";
-import { ensureAdminSeed, getUsers, sanitizeUser, saveUsers } from "./_lib/db.js";
+import { ensureAdminSeed, getUsers, getGuests, getUsageLogs, sanitizeUser, saveUsers } from "./_lib/db.js";
 import { badRequest, forbidden, json, methodNotAllowed, parseBody, unauthorized } from "./_lib/http.js";
 
 function getAdmin(users, authPayload) {
@@ -43,11 +43,32 @@ export async function handler(event) {
     }
     if (changed) await saveUsers(event, users);
 
+    const [guests, usageLogs] = await Promise.all([
+      getGuests(event),
+      getUsageLogs(event)
+    ]);
+
+    const ipSet = new Set();
+    users.forEach((u) => {
+      if (u.lastIp && u.lastIp !== "unknown") ipSet.add(u.lastIp);
+    });
+    Object.values(guests).forEach((g) => {
+      if (g.lastIp && g.lastIp !== "unknown") ipSet.add(g.lastIp);
+    });
+    usageLogs.forEach((log) => {
+      if (log.ip && log.ip !== "unknown") ipSet.add(log.ip);
+    });
+
     return json(200, {
       ok: true,
-      items: users.map(sanitizeUser)
+      items: users.map(sanitizeUser),
+      stats: {
+        totalUniqueGuests: Object.keys(guests).length,
+        totalUniqueIps: ipSet.size
+      }
     });
   }
+
 
   let body;
   try {

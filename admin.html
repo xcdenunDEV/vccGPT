@@ -1,162 +1,235 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VCC GPT Admin</title>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body data-page="admin">
-    <div class="bg-layer" aria-hidden="true"></div>
-    <div class="bg-glow" aria-hidden="true"></div>
 
-    <header class="topbar">
-      <div class="brand-wrap">
-        <span class="brand-logo">V</span>
-        <span class="brand-kicker">Dashboard</span>
-        <h1>VCC GPT Admin</h1>
-      </div>
-      <div class="session-wrap">
-        <a class="btn btn-soft" href="./index.html">Home</a>
-        <p id="sessionRole">Role: Guest</p>
-        <button id="logoutBtn" class="btn btn-soft hidden" type="button">Logout</button>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VCC GPT Admin - Dashboard</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Chakra+Petch:wght@500;700&display=swap" />
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="./styles.css" />
+  <style type="text/tailwindcss">
+    @theme {
+      --font-sans: 'Inter', sans-serif;
+    }
+  </style>
+</head>
 
-    <main class="layout admin-layout">
-      <section id="adminNotice" class="panel reveal">
-        <h2>Admin Dashboard</h2>
-        <p id="adminNoticeText" class="muted">Login sebagai admin untuk mengelola data VCC dan user.</p>
-      </section>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased relative">
+  <!-- Glowing overlays -->
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
 
-      <section id="loginPanel" class="panel reveal delay-1">
-        <h3>Admin Login</h3>
-        <p class="muted">Hanya role admin yang bisa masuk ke dashboard ini.</p>
-        <form id="loginForm" class="stack-form">
-          <label>
-            Username
-            <input id="usernameInput" type="text" autocomplete="username" required />
-          </label>
-          <label>
-            Password
-            <input id="passwordInput" type="password" autocomplete="current-password" required />
-          </label>
-          <button class="btn btn-main" type="submit">Login</button>
-        </form>
-        <p id="adminMessage" class="message"></p>
-      </section>
-
-      <section id="adminPanel" class="panel hidden reveal delay-2">
-        <h3>Kelola Data</h3>
-        <div class="admin-grid">
-          <article class="subpanel">
-            <h3>Kelola VCC Dummy</h3>
-            <form id="vccForm" class="stack-form">
-              <label>
-                Input List VCC Batch (1 baris 1 data)
-                <textarea
-                  id="vccInput"
-                  rows="7"
-                  placeholder="6258146890309625|10|2026|241"
-                  required
-                ></textarea>
-              </label>
-              <label>
-                Upload file batch (.txt / .csv)
-                <input id="vccFileInput" type="file" accept=".txt,.csv" />
-              </label>
-              <p id="vccBatchInfo" class="muted">Batch lines: 0</p>
-              <button class="btn btn-main" type="submit">Tambah ke Pool</button>
-            </form>
-            <p id="vccResult" class="message"></p>
-
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Number</th>
-                    <th>Exp</th>
-                    <th>CVV</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="vccTableBody"></tbody>
-              </table>
-            </div>
-            <div id="vccPagination" class="table-pagination"></div>
-          </article>
-
-          <article class="subpanel">
-            <h3>Kelola User & Credit</h3>
-            <form id="addUserForm" class="stack-form">
-              <label>
-                Username
-                <input id="newUsername" type="text" required />
-              </label>
-              <label>
-                Password
-                <input id="newPassword" type="text" required />
-              </label>
-              <label>
-                Role
-                <select id="newRole">
-                  <option value="free">Free</option>
-                  <option value="premium">Premium</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </label>
-              <label>
-                Initial Credit
-                <input id="newCredit" type="number" min="0" value="0" />
-              </label>
-              <button class="btn btn-main" type="submit">Tambah User</button>
-            </form>
-            <p id="userResult" class="message"></p>
-            <p id="userListState" class="muted">Loading users...</p>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>User</th>
-                    <th>Role</th>
-                    <th>Credit</th>
-                    <th>Topup</th>
-                  </tr>
-                </thead>
-                <tbody id="userTableBody"></tbody>
-              </table>
-            </div>
-            <div id="userPagination" class="table-pagination"></div>
-          </article>
-
-          <article class="subpanel subpanel-wide">
-            <h3>Ubah Password Admin</h3>
-            <form id="adminPasswordForm" class="stack-form">
-              <label>
-                Password Lama
-                <input id="adminCurrentPassword" type="password" autocomplete="current-password" required />
-              </label>
-              <label>
-                Password Baru
-                <input id="adminNewPassword" type="password" autocomplete="new-password" required />
-              </label>
-              <label>
-                Konfirmasi Password Baru
-                <input id="adminConfirmPassword" type="password" autocomplete="new-password" required />
-              </label>
-              <button class="btn btn-main" type="submit">Update Password</button>
-            </form>
-            <p id="adminPasswordResult" class="message"></p>
-          </article>
+  <!-- Header Section -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-900/60 px-4 md:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-slate-950 bg-gradient-to-r from-sky-400 to-blue-500 shadow-md shadow-sky-500/20 font-mono text-lg select-none">V</span>
+        <div>
+          <span class="block text-[9px] tracking-widest text-slate-500 uppercase font-bold">Dashboard</span>
+          <h1 class="text-base md:text-lg font-extrabold tracking-tight text-white font-mono leading-none">VCC GPT Admin</h1>
         </div>
-      </section>
-    </main>
+      </div>
+      <div class="flex items-center gap-2.5 sm:gap-4">
+        <a class="text-xs font-semibold px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 rounded-lg transition-all" href="./index.html">Home</a>
+        <p id="sessionRole" class="text-[11px] sm:text-xs text-slate-400 bg-slate-900/50 border border-slate-850 rounded-full px-3 py-1 font-medium">Role: Guest</p>
+        <button id="logoutBtn" class="hidden text-xs font-semibold px-3.5 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-450 border border-rose-500/20 rounded-lg transition-all cursor-pointer" type="button">Logout</button>
+      </div>
+    </div>
+  </header>
 
-    <script type="module" src="./app.js"></script>
-  </body>
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 space-y-6 relative z-10">
+
+    <!-- Admin Notice Bar -->
+    <section id="adminNotice" class="bg-slate-900/20 border border-slate-900/80 backdrop-blur-sm rounded-xl p-4 md:p-5 flex flex-col gap-1.5 shadow-md reveal">
+      <h2 class="text-base md:text-lg font-bold text-white font-mono leading-none">Admin Dashboard</h2>
+      <p id="adminNoticeText" class="text-xs md:text-sm text-slate-400">Login sebagai admin untuk mengelola data VCC dan user.</p>
+    </section>
+
+    <!-- Admin Login Panel (Hidden when logged in) -->
+    <section id="loginPanel" class="max-w-md mx-auto w-full bg-slate-900/20 border border-slate-900/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 space-y-6 shadow-2xl flex flex-col reveal delay-1">
+      <div class="space-y-1.5">
+        <h3 class="text-lg font-bold text-white font-mono leading-none">Admin Login</h3>
+        <p class="text-xs text-slate-400">Hanya role admin yang bisa masuk ke dashboard ini.</p>
+      </div>
+      <form id="loginForm" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Username</label>
+          <input id="usernameInput" type="text" autocomplete="username" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-sm transition-all" required />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Password</label>
+          <input id="passwordInput" type="password" autocomplete="current-password" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-sm transition-all" required />
+        </div>
+        <button class="bg-slate-100 hover:bg-slate-200 text-slate-950 font-bold py-2.5 px-4 rounded-lg text-xs w-full transition-colors cursor-pointer mt-1" type="submit">Login</button>
+      </form>
+      <p id="loginMessage" class="text-[11px] font-semibold mt-0 p-0 border-0 bg-transparent h-0 overflow-hidden text-center w-full"></p>
+      <p id="adminMessage" class="text-xs font-semibold h-4 text-slate-400"></p>
+    </section>
+
+    <!-- Admin main panel (Initially hidden, revealed on successful Admin Auth) -->
+    <section id="adminPanel" class="hidden space-y-6 reveal delay-2">
+      
+      <!-- Stats Summary Row -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="bg-slate-900/20 border border-slate-900 p-4 rounded-xl shadow-md flex flex-col justify-between gap-2">
+          <span class="text-[9px] tracking-wider text-slate-500 uppercase font-semibold">VCC Keseluruhan</span>
+          <strong id="statTotalVcc" class="text-xl md:text-2xl font-bold font-mono text-white mt-1">0</strong>
+        </div>
+        <div class="bg-slate-900/20 border border-slate-900 p-4 rounded-xl shadow-md flex flex-col justify-between gap-2">
+          <span class="text-[9px] tracking-wider text-slate-500 uppercase font-semibold">VCC Terpakai</span>
+          <strong id="statUsedVcc" class="text-xl md:text-2xl font-bold font-mono text-emerald-400 mt-1">0</strong>
+        </div>
+        <div class="bg-slate-900/20 border border-slate-900 p-4 rounded-xl shadow-md flex flex-col justify-between gap-2">
+          <span class="text-[9px] tracking-wider text-slate-500 uppercase font-semibold">VCC Tersedia</span>
+          <strong id="statAvailableVcc" class="text-xl md:text-2xl font-bold font-mono text-sky-400 mt-1">0</strong>
+        </div>
+        <div class="bg-slate-900/20 border border-slate-900 p-4 rounded-xl shadow-md flex flex-col justify-between gap-2">
+          <span class="text-[9px] tracking-wider text-slate-500 uppercase font-semibold">Registered Users</span>
+          <strong id="statTotalUsers" class="text-xl md:text-2xl font-bold font-mono text-white mt-1">0</strong>
+        </div>
+        <div class="bg-slate-900/20 border border-slate-900 p-4 rounded-xl shadow-md flex flex-col justify-between gap-2">
+          <span class="text-[9px] tracking-wider text-slate-500 uppercase font-semibold">Unique Guests</span>
+          <strong id="statUniqueGuests" class="text-xl md:text-2xl font-bold font-mono text-slate-300 mt-1">0</strong>
+        </div>
+        <div class="bg-slate-900/20 border border-slate-900 p-4 rounded-xl shadow-md flex flex-col justify-between gap-2">
+          <span class="text-[9px] tracking-wider text-slate-500 uppercase font-semibold">Unique IPs</span>
+          <strong id="statUniqueIps" class="text-xl md:text-2xl font-bold font-mono text-slate-300 mt-1">0</strong>
+        </div>
+      </div>
+
+      <!-- Management Grids -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- VCC Pool Management Panel -->
+        <article class="bg-slate-900/20 border border-slate-900/80 backdrop-blur-sm rounded-2xl p-6 space-y-5 shadow-xl">
+          <h3 class="text-base font-bold text-white font-mono border-b border-slate-900/60 pb-3">Kelola Data VCC Dummy</h3>
+          <form id="vccForm" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Input List VCC Batch (1 baris 1 data)</label>
+              <textarea id="vccInput" rows="5" placeholder="6258146890309625|10|2026|241" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-xs md:text-sm transition-all" required></textarea>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-950/40 p-3 rounded-lg border border-slate-900">
+              <div class="flex flex-col gap-1">
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Upload file batch (.txt / .csv)</span>
+                <input id="vccFileInput" type="file" accept=".txt,.csv" class="text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-slate-200 file:cursor-pointer hover:file:bg-slate-800" />
+              </div>
+              <p id="vccBatchInfo" class="text-xs font-mono text-slate-500 self-end">Batch lines: 0</p>
+            </div>
+
+            <button class="bg-slate-100 hover:bg-slate-200 text-slate-950 font-bold py-2.5 px-4 rounded-lg text-xs w-full transition-colors cursor-pointer mt-1" type="submit">Tambah ke Pool</button>
+          </form>
+          
+          <p id="vccResult" class="text-xs font-semibold h-4 text-slate-400"></p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Number</th>
+                  <th>Exp</th>
+                  <th>CVV</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="vccTableBody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+          <div id="vccPagination" class="table-pagination"></div>
+        </article>
+
+        <!-- User Accounts Management Panel -->
+        <article class="bg-slate-900/20 border border-slate-900/80 backdrop-blur-sm rounded-2xl p-6 space-y-5 shadow-xl">
+          <h3 class="text-base font-bold text-white font-mono border-b border-slate-900/60 pb-3">Kelola User & Credit</h3>
+          <form id="addUserForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Username</label>
+              <input id="newUsername" type="text" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-xs md:text-sm transition-all" required />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Password</label>
+              <input id="newPassword" type="text" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-xs md:text-sm transition-all" required />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Role</label>
+              <select id="newRole" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-xs md:text-sm transition-all select-none">
+                <option value="free" class="bg-slate-950">Free</option>
+                <option value="premium" class="bg-slate-950">Premium</option>
+                <option value="admin" class="bg-slate-950">Admin</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Initial Credit</label>
+              <input id="newCredit" type="number" min="0" value="0" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-xs md:text-sm transition-all" />
+            </div>
+            <button class="col-span-1 sm:col-span-2 bg-slate-100 hover:bg-slate-200 text-slate-950 font-bold py-2.5 px-4 rounded-lg text-xs w-full transition-colors cursor-pointer mt-1" type="submit">Tambah User</button>
+          </form>
+
+          <p id="userResult" class="text-xs font-semibold h-4 text-slate-400"></p>
+          <p id="userListState" class="text-xs text-slate-500 italic">Loading users...</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Credit</th>
+                  <th>Last IP</th>
+                  <th>Topup</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+          <div id="userPagination" class="table-pagination"></div>
+        </article>
+
+        <!-- Admin Change Password Panel (Wide/Centered at the bottom of panel) -->
+        <article class="bg-slate-900/20 border border-slate-900/80 backdrop-blur-sm rounded-2xl p-6 space-y-5 shadow-xl lg:col-span-2 max-w-xl mx-auto w-full">
+          <h3 class="text-base font-bold text-white font-mono border-b border-slate-900/60 pb-3 text-center">Ubah Password Admin</h3>
+          <form id="adminPasswordForm" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Password Lama</label>
+              <input id="adminCurrentPassword" type="password" autocomplete="current-password" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-sm transition-all" required />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Password Baru</label>
+              <input id="adminNewPassword" type="password" autocomplete="new-password" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-sm transition-all" required />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Konfirmasi Password Baru</label>
+              <input id="adminConfirmPassword" type="password" autocomplete="new-password" class="bg-slate-950 border border-slate-900 text-slate-200 rounded-lg p-2.5 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none text-sm transition-all" required />
+            </div>
+            <button class="bg-slate-100 hover:bg-slate-200 text-slate-950 font-bold py-2.5 px-4 rounded-lg text-xs w-full transition-colors cursor-pointer mt-1" type="submit">Update Password</button>
+          </form>
+          <p id="adminPasswordResult" class="text-xs font-semibold h-4 text-slate-400 text-center"></p>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Floating WhatsApp FAB -->
+  <a href="https://wa.me/6285156434202?text=Halo%20Admin%2C%20saya%20mau%20topup%20credit%20VCC%20GPT"
+     target="_blank" rel="noreferrer"
+     class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-full shadow-lg shadow-[#25D366]/20 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer group"
+     title="Topup via WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.019-5.117-2.875-6.973C16.594 1.91 14.12 8.89 11.48 8.89c-5.44 0-9.866 4.418-9.87 9.865 0 1.678.449 3.32 1.3 4.787l.285.496-1.04 3.793 3.882-1.02.487.29zM17.487 14.39c-.3-.15-1.782-.88-2.057-.98-.275-.1-.475-.15-.675.15-.2.3-.77.98-.945 1.18-.175.2-.35.225-.65.075-.3-.15-1.264-.467-2.408-1.486-.89-.795-1.49-1.77-1.665-2.07-.175-.3-.02-.46.13-.61.135-.133.3-.35.45-.525.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.675-1.625-.925-2.225-.244-.589-.486-.51-.67-.52l-.57-.01c-.2 0-.525.075-.8.375-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.11 3.22 5.11 4.52.714.31 1.27.49 1.7.63.717.228 1.368.19 1.884.11.575-.085 1.78-.725 2.03-1.425.25-.7.25-1.3 1.175-1.425z"/>
+    </svg>
+  </a>
+
+  <script type="module" src="./app.js"></script>
+</body>
+
 </html>

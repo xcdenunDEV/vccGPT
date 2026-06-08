@@ -12,7 +12,7 @@ import {
   saveUsers,
   saveVccPool
 } from "./_lib/db.js";
-import { badRequest, json, methodNotAllowed, parseBody } from "./_lib/http.js";
+import { badRequest, getClientIp, json, methodNotAllowed, parseBody } from "./_lib/http.js";
 import { maskCardNumber } from "./_lib/vcc.js";
 
 function pickAvailableVcc(vccPool) {
@@ -36,6 +36,7 @@ export async function handler(event) {
 
   const guestId = String(body.guestId || "").trim();
   const auth = getAuthPayload(event);
+  const clientIp = getClientIp(event);
 
   const [users, guests, vccPool, usageLogs] = await Promise.all([
     getUsers(event),
@@ -61,8 +62,12 @@ export async function handler(event) {
       actorId = user.id;
       actorLabel = user.username;
       actorRole = user.role;
-      const { changed } = applyCumulativeCredits(user, user.role);
-      actorChanged = changed;
+      const { changed: creditsChanged } = applyCumulativeCredits(user, user.role);
+      actorChanged = creditsChanged;
+      if (user.lastIp !== clientIp) {
+        user.lastIp = clientIp;
+        actorChanged = true;
+      }
       actorCredits = user.role === "admin" ? Infinity : Number(user.credits || 0);
     }
   }
@@ -70,8 +75,12 @@ export async function handler(event) {
   if (!actingUser) {
     if (!guestId) return badRequest("guestId is required for guest generation");
     actingGuest = guests[guestId] || { credits: 0, lastCreditAt: null };
-    const { changed } = applyCumulativeCredits(actingGuest, "guest");
-    actorChanged = changed;
+    const { changed: creditsChanged } = applyCumulativeCredits(actingGuest, "guest");
+    actorChanged = creditsChanged;
+    if (actingGuest.lastIp !== clientIp) {
+      actingGuest.lastIp = clientIp;
+      actorChanged = true;
+    }
     actorCredits = Number(actingGuest.credits || 0);
     guests[guestId] = actingGuest;
   }
@@ -121,7 +130,8 @@ export async function handler(event) {
     usedAt: now,
     actorType,
     actorId,
-    actorLabel
+    actorLabel,
+    ip: clientIp
   };
 
   usageLogs.unshift(historyEntry);
@@ -152,3 +162,4 @@ export async function handler(event) {
     historyEntry
   });
 }
+

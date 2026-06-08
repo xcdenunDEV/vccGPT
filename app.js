@@ -1,4 +1,4 @@
-﻿const TOKEN_KEY = "vcc_gpt_token";
+const TOKEN_KEY = "vcc_gpt_token";
 const GUEST_KEY = "vcc_gpt_guest_id";
 const PAGE_MODE = document.body?.dataset?.page || "home";
 
@@ -13,7 +13,8 @@ const state = {
   vccPage: 1,
   userPage: 1,
   vccPageSize: 10,
-  userPageSize: 10
+  userPageSize: 10,
+  userStats: { totalUniqueGuests: 0, totalUniqueIps: 0 }
 };
 
 const el = {
@@ -28,6 +29,7 @@ const el = {
   dailyCreditValue: document.getElementById("dailyCreditValue"),
   generateBtn: document.getElementById("generateBtn"),
   generateMessage: document.getElementById("generateMessage"),
+  loginMessage: document.getElementById("loginMessage"),
   adminMessage: document.getElementById("adminMessage"),
   adminNoticeText: document.getElementById("adminNoticeText"),
   vccCard: document.getElementById("vccCard"),
@@ -128,7 +130,21 @@ function refreshBatchInfo() {
 function showMessage(target, message, isError = false) {
   if (!target) return;
   target.textContent = message || "";
-  target.style.color = isError ? "var(--danger)" : "var(--ink-soft)";
+  
+  const alertIds = ["loginMessage", "adminMessage", "vccResult", "userResult", "adminPasswordResult"];
+  if (alertIds.includes(target.id)) {
+    if (message) {
+      target.className = isError
+        ? "text-[11px] font-semibold mt-3 p-2.5 rounded-lg border border-rose-500/20 bg-rose-500/10 text-rose-400 text-center w-full transition-all duration-200"
+        : "text-[11px] font-semibold mt-3 p-2.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-center w-full transition-all duration-200";
+      target.style.color = "";
+    } else {
+      target.className = "text-[11px] font-semibold mt-0 p-0 border-0 bg-transparent h-0 overflow-hidden text-center w-full";
+      target.style.color = "";
+    }
+  } else {
+    target.style.color = isError ? "var(--danger)" : "var(--ink-soft)";
+  }
 }
 
 function resetCardTransform() {
@@ -450,6 +466,22 @@ function renderVccTable() {
   renderPagination(el.vccPagination, "vcc", state.vccPage, totalPages, state.vccItems.length);
 }
 
+function updateAdminStats() {
+  const totalVccEl = document.getElementById("statTotalVcc");
+  const usedVccEl = document.getElementById("statUsedVcc");
+  const availableVccEl = document.getElementById("statAvailableVcc");
+  const totalUsersEl = document.getElementById("statTotalUsers");
+  const uniqueGuestsEl = document.getElementById("statUniqueGuests");
+  const uniqueIpsEl = document.getElementById("statUniqueIps");
+
+  if (totalVccEl) totalVccEl.textContent = state.vccItems.length;
+  if (usedVccEl) usedVccEl.textContent = state.vccItems.filter((item) => item.used).length;
+  if (availableVccEl) availableVccEl.textContent = state.vccItems.filter((item) => !item.used).length;
+  if (totalUsersEl) totalUsersEl.textContent = state.userItems.length;
+  if (uniqueGuestsEl) uniqueGuestsEl.textContent = state.userStats?.totalUniqueGuests || 0;
+  if (uniqueIpsEl) uniqueIpsEl.textContent = state.userStats?.totalUniqueIps || 0;
+}
+
 function renderUserTable() {
   if (!el.userTableBody) return;
 
@@ -458,7 +490,7 @@ function renderUserTable() {
   const pageItems = getPageSlice(state.userItems, state.userPage, state.userPageSize);
 
   if (pageItems.length === 0) {
-    el.userTableBody.innerHTML = "<tr><td colspan='4'>Belum ada user.</td></tr>";
+    el.userTableBody.innerHTML = "<tr><td colspan='5'>Belum ada user.</td></tr>";
   } else {
     el.userTableBody.innerHTML = pageItems
       .map((user) => {
@@ -474,6 +506,7 @@ function renderUserTable() {
           <td>${escapeHtml(user.username)}</td>
           <td>${escapeHtml(user.role)}</td>
           <td>${escapeHtml(user.creditsLabel)}</td>
+          <td><code>${escapeHtml(user.lastIp || "-")}</code></td>
           <td>${topupArea}</td>
         </tr>`;
       })
@@ -544,6 +577,7 @@ async function loadVccPool(resetPage = false) {
     state.vccItems = data.items || [];
     if (resetPage) state.vccPage = 1;
     renderVccTable();
+    updateAdminStats();
   } catch (error) {
     showMessage(el.vccResult, error.message, true);
   }
@@ -559,8 +593,10 @@ async function loadUsers(resetPage = false) {
   try {
     const data = await api("admin-users");
     state.userItems = data.items || [];
+    state.userStats = data.stats || { totalUniqueGuests: 0, totalUniqueIps: 0 };
     if (resetPage) state.userPage = 1;
     renderUserTable();
+    updateAdminStats();
 
     if (el.userListState) {
       if (state.userItems.length === 0) {
@@ -612,7 +648,7 @@ async function handleLogin(event) {
   const password = el.passwordInput?.value?.trim();
   if (!username || !password) return;
 
-  const messageTarget = getPrimaryMessageTarget();
+  const messageTarget = el.loginMessage || getPrimaryMessageTarget();
   showMessage(messageTarget, "Login process...");
 
   try {

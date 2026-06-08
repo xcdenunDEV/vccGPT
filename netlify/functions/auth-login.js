@@ -1,7 +1,7 @@
 import { signToken, verifyPassword } from "./_lib/auth.js";
 import { applyCumulativeCredits } from "./_lib/credits.js";
 import { ensureAdminSeed, getUsers, sanitizeUser, saveUsers } from "./_lib/db.js";
-import { badRequest, json, methodNotAllowed, parseBody, unauthorized } from "./_lib/http.js";
+import { badRequest, getClientIp, json, methodNotAllowed, parseBody, unauthorized } from "./_lib/http.js";
 
 export async function handler(event) {
   if (event.httpMethod !== "POST") return methodNotAllowed(["POST"]);
@@ -25,7 +25,15 @@ export async function handler(event) {
     return unauthorized("Invalid username or password");
   }
 
-  const { changed } = applyCumulativeCredits(user, user.role);
+  const { changed: creditsChanged } = applyCumulativeCredits(user, user.role);
+  let changed = creditsChanged;
+
+  const clientIp = getClientIp(event);
+  if (user.lastIp !== clientIp) {
+    user.lastIp = clientIp;
+    changed = true;
+  }
+
   if (changed) await saveUsers(event, users);
 
   const token = signToken({
@@ -40,3 +48,4 @@ export async function handler(event) {
     user: sanitizeUser(user)
   });
 }
+
